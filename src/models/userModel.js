@@ -60,3 +60,11 @@ export const getUserById_model = async (userId) => {
     } 
     return ret_value;
 }
+
+
+
+export const modifyUser_model = async (userId, campi_da_modificare) => {
+    const [result] = await db.query('UPDATE persona SET nome = ?, cognome = ?, mail = ?, password_hash = ? WHERE id = ?',
+        [campi_da_modificare.nome, campi_da_modificare.cognome, campi_da_modificare.email, await campi_da_modificare.password, userId]);
+    
+}

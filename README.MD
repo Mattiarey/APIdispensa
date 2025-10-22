@@ -39,28 +39,33 @@ Persona
 
 Casa
 - [ ] Creare casa
+- [ ] Get casa
 - [ ] Modificare casa
 - [ ] Eliminare casa
 - [ ] Aggiungere persone alla casa
 
 Oggetti spesa
 - [ ] Aggiungere oggetti spesa alla casa
+- [ ] Get oggetto
 - [ ] Modificare oggetti spesa dalla lista della casa
 - [ ] Eliminare oggetti spesa dalla lista della casa
 - [ ] Mettere gli oggetti dalla lista della spesa alla dispensa
 
 Dispensa
 - [ ] Creare dispensa
+- [ ] Get dispensa
 - [ ] Modificare dispensa
 - [ ] Eliminare dispensa
 
 Tipo Dispensa
 - [ ] Creare tipo dispensa
+- [ ] Get tipo
 - [ ] Modificare tipo dispensa
 - [ ] Eliminare tipo dispensa
  
 Oggetti dispensa
 - [ ] Creare oggetti dispensa
+- [ ] Get oggetto
 - [ ] Modificare (e/o aggiornare) oggetti dispensa
 - [ ] Eliminare oggetti dispensa
 - [ ] Aggiungere informazioni a quelli ottenuti dalla lista della spesa
@@ -68,6 +73,7 @@ Oggetti dispensa
 
 Tipo oggetti dispensa
 - [ ] Creare tipo oggetti
+- [ ] Get tipo
 - [ ] Modificare tipo oggetti
 - [ ] Eliminare tipo oggetti
 
@@ -79,6 +85,8 @@ Ho avuto problemi con i trigger per i log, ho paura che siano da rifare completa
 Per ora la scelta migliore sembra proprio di toglierli del tutto
 ### Cose che potrebbero tornare di molto utili
 Credo che per testare la API insomnia sia broken e poi potrebbe tornare anche utile usare Swagger per la documentazione (comunque mi sembra che anche lui ti faccia testare la roba)
+
+==ASSOLUTAMENTE== collegare gli errori della API con [http.cat](https://http.cat)
 
 ---
 

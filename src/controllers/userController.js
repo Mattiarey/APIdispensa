@@ -6,6 +6,7 @@ import {getUsers} from '../models/userModel.js';
 import {newUser} from '../models/userModel.js';
 import {get_user_safe} from '../models/userModel.js';
 import {getUserById_model} from '../models/userModel.js';
+import {modifyUser_model} from '../models/userModel.js';
 
 
 
@@ -62,6 +63,27 @@ export const loginUser = async (req, res) => {
         const result = await get_user_safe(credentials);
         res.json({ result });
     } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+}
+
+
+
+/**
+ * 
+ * Fare solo attenzione, client side, l'utente non faccia cagate: fare prima una query per prendere i dati attuali e poi modificare solo quelli che servono.
+ * Inoltre siccome la password viene hashata, farla modificare in un altro modo.
+ * @param {*} req Richiede l'id dell'utente e i campi da modificare.
+ * @returns restituisce un messaggio di conferma
+ */
+export const modUser = async (req, res) => {
+    try {
+        const id_utente = req.body.id;
+        const campi_da_modificare = Persona.createSafe(req.body);
+
+        let result = await modifyUser_model(id_utente, campi_da_modificare);
+        res.json({ result });
+    }catch (error) {
         res.status(500).json({ error: error.message });
     }
 }
