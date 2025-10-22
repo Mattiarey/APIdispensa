@@ -29,10 +29,39 @@ Le cartelle appena esplicitate sono da considerare come quelle del modello MVC i
 
 Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti, quindi non dovrebbe essere troppo difficile capire tra mille anni.
 
-### File completati
-- [x] db.js
-- [ ] app.js
-- [x] server.js
+### Cose da fare
+- [x] Creare utente
+- [x] Login utente
+- [ ] Modifica utente
+- [ ] Eliminare utente
+
+- [ ] Creare casa
+- [ ] Modificare casa
+- [ ] Eliminare casa
+- [ ] Aggiungere persone alla casa
+
+- [ ] Aggiungere oggetti spesa alla casa
+- [ ] Modificare oggetti spesa dalla lista della casa
+- [ ] Eliminare oggetti spesa dalla lista della casa
+- [ ] Mettere gli oggetti dalla lista della spesa alla dispensa
+
+- [ ] Creare dispensa
+- [ ] Modificare dispensa
+- [ ] Eliminare dispensa
+
+- [ ] Creare tipo dispensa
+- [ ] Modificare tipo dispensa
+- [ ] Eliminare tipo dispensa
+ 
+- [ ] Creare oggetti dispensa
+- [ ] Modificare (e/o aggiornare) oggetti dispensa
+- [ ] Eliminare oggetti dispensa
+- [ ] Aggiungere informazioni a quelli ottenuti dalla lista della spesa
+- [ ] Fare in modo che gli oggetti che si aggiungano, se dello stesso tipo (all'incirca, nel senso che alcune informazioni in certi casi possono anche andare nascoste) siano cumulabili.
+
+- [ ] Creare tipo oggetti
+- [ ] Modificare tipo oggetti
+- [ ] Eliminare tipo oggetti
 
 ### Database
 Il database utilizzato è quello che sta nell'altro progetto di git, eventualmente lo metterò in sta cartella, ma ora non ho proprio voglia :p 

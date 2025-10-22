@@ -1,6 +1,10 @@
 import bcrypt from 'bcrypt';
 
-
+/**
+ * Equivalente in classe della tabella persona del database
+ * Per creare un nuovo utente, usare il metodo statico create
+ * Gli altri metodi statici non vanno bene, ma sono necessari 
+ */
 export default class Persona {
   constructor({ nome, cognome, email, passwordHash }) {
     this.nome = nome;
@@ -28,23 +32,3 @@ export default class Persona {
 }
 
 
-/*export class SafePersona {
-  constructor({ id, nome, cognome, email, password_hash }) {
-    this.id = id;
-    this.nome = nome;
-    this.cognome = cognome;
-    this.mail = email;
-    this.password_hash = password_hash;
-  }
-  async verifica_password(password) {
-    console.log(this.password_hash, password);
-    return await bcrypt.compare(password, this.password_hash);
-  }
-}
-export class Credentials extends SafePersona {
-  constructor({ email, password }) {
-    super({ email, password });
-    this.mail = email;
-    this.password_hash = password;
-  }
-}*/

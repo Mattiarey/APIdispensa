@@ -1,4 +1,4 @@
-import {db} from '../config/db.js';
+import { db } from '../config/db.js';
 import Persona from '../entities/user.js';
 
 /**
@@ -9,6 +9,9 @@ export const getUsers = async () => {
     const [rows] = await db.query('SELECT * FROM persona');
     return rows;
 }
+
+
+
 /**
  * 
  * @param {*} persona 
@@ -19,6 +22,9 @@ export const newUser = async (persona) => {
         [persona.nome, persona.cognome, persona.email, await persona.password]);
     return { id: result.insertId, ...persona, password: await persona.password };
 }
+
+
+
 /**
  * Questa funzione, in se per se, non è sicura. Bisogna rilasciare un token insieme all'id
  * @param {*} credentials 
@@ -34,10 +40,10 @@ export const get_user_safe = async (credentials) => {
         var user = Persona.createSafe(user_data);
         //var check = await bcrypt.compare(credentials.password_hash, user.password_hash);
         var check = await user.verifica_password(credentials.password);
-        if(check){
+        if (check) {
             const [id] = await db.query('SELECT * FROM persona WHERE mail = ?', credentials.email);
             ret_value = id[0].id;
-        }else {
+        } else {
             ret_value = "Password errata";
         }
     }
