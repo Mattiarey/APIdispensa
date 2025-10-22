@@ -30,35 +30,43 @@ Le cartelle appena esplicitate sono da considerare come quelle del modello MVC i
 Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti, quindi non dovrebbe essere troppo difficile capire tra mille anni.
 
 ### Cose da fare
+Persona
 - [x] Creare utente
 - [x] Login utente
+- [x] Get utente
 - [ ] Modifica utente
 - [ ] Eliminare utente
 
+Casa
 - [ ] Creare casa
 - [ ] Modificare casa
 - [ ] Eliminare casa
 - [ ] Aggiungere persone alla casa
 
+Oggetti spesa
 - [ ] Aggiungere oggetti spesa alla casa
 - [ ] Modificare oggetti spesa dalla lista della casa
 - [ ] Eliminare oggetti spesa dalla lista della casa
 - [ ] Mettere gli oggetti dalla lista della spesa alla dispensa
 
+Dispensa
 - [ ] Creare dispensa
 - [ ] Modificare dispensa
 - [ ] Eliminare dispensa
 
+Tipo Dispensa
 - [ ] Creare tipo dispensa
 - [ ] Modificare tipo dispensa
 - [ ] Eliminare tipo dispensa
  
+Oggetti dispensa
 - [ ] Creare oggetti dispensa
 - [ ] Modificare (e/o aggiornare) oggetti dispensa
 - [ ] Eliminare oggetti dispensa
 - [ ] Aggiungere informazioni a quelli ottenuti dalla lista della spesa
 - [ ] Fare in modo che gli oggetti che si aggiungano, se dello stesso tipo (all'incirca, nel senso che alcune informazioni in certi casi possono anche andare nascoste) siano cumulabili.
 
+Tipo oggetti dispensa
 - [ ] Creare tipo oggetti
 - [ ] Modificare tipo oggetti
 - [ ] Eliminare tipo oggetti

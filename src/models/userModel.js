@@ -49,3 +49,14 @@ export const get_user_safe = async (credentials) => {
     }
     return ret_value;
 }
+
+
+
+export const getUserById_model = async (userId) => {
+    const [rows] = await db.query('SELECT * FROM persona WHERE id = ?', userId);
+    var ret_value = "Utente non trovato"
+    if (rows.length === 1) {
+        ret_value = Persona.createSafe(rows[0]);
+    } 
+    return ret_value;
+}

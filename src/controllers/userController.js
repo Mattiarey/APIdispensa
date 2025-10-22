@@ -5,6 +5,7 @@ import Persona from '../entities/user.js';
 import {getUsers} from '../models/userModel.js';
 import {newUser} from '../models/userModel.js';
 import {get_user_safe} from '../models/userModel.js';
+import {getUserById_model} from '../models/userModel.js';
 
 
 
@@ -13,7 +14,23 @@ export const getAllUsers = async (req, res) => {
         const users = await getUsers();
         res.json(users);
     } catch (error) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({ error: error.message });
+    }
+}
+
+
+/**
+ * @requires Serve l'ID dell'utente da cercare
+ * @returns Restituisce l'utente con l'ID specificato
+ */
+export const getUserById = async (req, res) => {
+    try {
+        // probabilmente non funzionerà .body
+        const userId = req.body.id;
+        let full_user = await getUserById_model(userId);
+        res.json(full_user);
+    }catch (error) {
+        res.status(500).json({ error: error.message });
     }
 }
 
