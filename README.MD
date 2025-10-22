@@ -2,12 +2,15 @@
 Va beh, a parte installare node.js bisogna anche fare 
 
 `npm install express mysql2 dotenv`
- 
-e
-
 `npm install nodemon --save-dev`
+`npm i bcrypt`
 
 Scrivo questa roba perché ho paura che la cartella node_modules sia troppo pesante per git
+
+# Per farlo partire da console
+Almeno nella fase di sviluppo, non so ancora come farlo partire quando sarà sul serverozzo
+
+`npm run dev`
 
 # Cosa mettere nelle cartelle
 1. Config: Tutte le configurazioni globali    
@@ -28,5 +31,18 @@ Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti,
 
 ### File completati
 - [x] db.js
-- [] app.js
+- [ ] app.js
 - [x] server.js
+
+### Database
+Il database utilizzato è quello che sta nell'altro progetto di git, eventualmente lo metterò in sta cartella, ma ora non ho proprio voglia :p 
+
+# Trigger
+Ho avuto problemi con i trigger per i log, ho paura che siano da rifare completamente da capo, capita. Magari eviterei di farli implementare completamente da chatgpt, specialmente se non so come funzionino.
+Per ora la scelta migliore sembra proprio di toglierli del tutto
+### Cose che potrebbero tornare di molto utili
+Credo che per testare la API insomnia sia broken e poi potrebbe tornare anche utile usare Swagger per la documentazione (comunque mi sembra che anche lui ti faccia testare la roba)
+
+---
+
+AAAA
