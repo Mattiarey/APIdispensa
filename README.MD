@@ -45,4 +45,5 @@ Credo che per testare la API insomnia sia broken e poi potrebbe tornare anche ut
 
 ---
 
-AAAA
+# Problemi noti
+- Per il login bisogna fare qualcosa di più safe, dato che usare soltanto l'ID non è la scelta migliore. Creare un token per autorizzare tutte le operazioni.
