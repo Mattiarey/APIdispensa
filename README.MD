@@ -12,11 +12,19 @@ Almeno nella fase di sviluppo, non so ancora come farlo partire quando sarà sul
 
 `npm run dev`
 
+# Creazione ambiente di sviluppo
+Praticamente per poterci lavorare sopra, siccome XAMPP è una merda astronomica si usa Docker. Si fa tutto il procedimento per mettere il database su Docker e poi esso creerà il database in locale.
+Per accedervi da vsCode (cosa altamente consigliata, in quanto è la cosa più comoda della terra) conviene usare lo user _dev_ e la password _devpass_
+
 # Cosa mettere nelle cartelle
 1. Config: Tutte le configurazioni globali    
 2. Models: Ci vanno i file dove vanno scritte le query
 3. Controllers: Come nell'MVC chiamo il model per i dati e li restituisco
 4. Routes: importa le funzioni dal controller, e le usa per mappare gli address
+
+# Log
+Per quanto i trigger possano funzionare a tenere un log sono particolarmente inutili in questo contesto: l'ideale sarebbe una totale compartimentazione delle componenti. Il database fa i dati e l'API fa il resto. Serve fare un middleware o una funzione in Nodejs che scriva ad ogni operazione nel file log.
+Quindi i trigger volano nel cestino e ora tocca creare una funzione wrapper per le operazioni sul DB che faccia in automatico anche il log. L'ho fatta fare a Gemini.
 
 ## Cosa metterci dentro ai file
 Le cartelle appena esplicitate sono da considerare come quelle del modello MVC in PHP, nel senso: ci va un file per ogni singola tabella del database
