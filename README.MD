@@ -25,6 +25,7 @@ Per accedervi da vsCode (cosa altamente consigliata, in quanto è la cosa più c
 # Log
 Per quanto i trigger possano funzionare a tenere un log sono particolarmente inutili in questo contesto: l'ideale sarebbe una totale compartimentazione delle componenti. Il database fa i dati e l'API fa il resto. Serve fare un middleware o una funzione in Nodejs che scriva ad ogni operazione nel file log.
 Quindi i trigger volano nel cestino e ora tocca creare una funzione wrapper per le operazioni sul DB che faccia in automatico anche il log. L'ho fatta fare a Gemini.
+C'è un log separato per ogni giornata, tenere in considerazione (per quando il progetto sarà vicino alla fine) che un grande uso di questa API potrebbe benissimo riempire la memoria del PC se non vengono eliminati i log vecchi. Magari potrebbe essere una buona idea creare un sottoprogrammino avviabile da remoto che crea un report di tutti i log, con delle statistiche, per poi eliminarli definitivamente e liberare lo spazio. Avrebbe senso anche se venisse avviato automaticamente ogni mese o qualcosa del genere.
 
 ## Cosa metterci dentro ai file
 Le cartelle appena esplicitate sono da considerare come quelle del modello MVC in PHP, nel senso: ci va un file per ogni singola tabella del database
