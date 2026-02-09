@@ -78,12 +78,37 @@ export const loginUser = async (req, res) => {
  */
 export const modUser = async (req, res) => {
     try {
-        const id_utente = req.body.id;
-        const campi_da_modificare = Persona.createSafe(req.body);
+        const { id, password, ...altriDati } = req.body;
 
-        let result = await modifyUser_model(id_utente, campi_da_modificare);
-        res.json({ result });
-    }catch (error) {
+        if (!id) {
+            return res.status(400).json({ error: "ID utente mancante" });
+        }
+
+        // 1. Creiamo l'istanza base con i dati "normali"
+        // Usiamo lo spread operator per passare nome, cognome, email
+        let utenteDaModificare = new Persona(altriDati);
+
+        // 2. Gestione speciale per la password (se presente)
+        if (password) {
+            // Usiamo il tuo metodo statico per generare l'hash
+            // Assumendo che create() restituisca una Persona con l'hash in .password
+            const utenteConPass = await Persona.create({ 
+                ...altriDati, 
+                password 
+            });
+            utenteDaModificare.password = utenteConPass.password;
+        }
+
+        // 3. Chiamata al modello dinamico
+        const result = await modifyUser_model(id, utenteDaModificare);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Utente non trovato o nessun dato modificato" });
+        }
+
+        res.json({ success: true, message: "Profilo aggiornato" });
+
+    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 }

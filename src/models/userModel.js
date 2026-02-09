@@ -62,9 +62,36 @@ export const getUserById_model = async (userId) => {
 }
 
 
-
+/**
+ * la pratica migliore da eseguire per una modifica è creare una query dinamica
+ * In questo modo se si invia due volte la stessa password cambierà l'hash, però non è un così gran problema. È il male minore
+ */
 export const modifyUser_model = async (userId, campi_da_modificare) => {
-    const [result] = await db.query('UPDATE persona SET nome = ?, cognome = ?, mail = ?, password_hash = ? WHERE id = ?',
-        [campi_da_modificare.nome, campi_da_modificare.cognome, campi_da_modificare.email, await campi_da_modificare.password, userId]);
     
+    const mapping = {
+        nome: 'nome',
+        cognome: 'cognome',
+        email: 'mail',
+        password: 'password_hash'
+    };
+    const updates = [];
+    const values = [];
+
+    for (const [key, value] of Object.entries(campi_da_modificare)){
+        const dbColumn = mapping[key];
+        
+        // CRUCIALE: Escludiamo valori nulli, indefiniti o metodi
+        if (dbColumn && value !== undefined && value !== null && typeof value !== 'function') {
+            updates.push(`${dbColumn} = ?`);
+            values.push(value);
+        }
+    }
+    if(updates.length === 0) return { affectedRows: 0 };
+
+    values.push(userId);
+
+    const query = `UPDATE persona SET ${updates.join(', ')} WHERE id = ?`;
+    
+    const [result] = await db.execute(query, values);
+    return result;
 }
