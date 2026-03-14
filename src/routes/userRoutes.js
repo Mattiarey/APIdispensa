@@ -11,6 +11,7 @@ import { delUser } from '../controllers/userController.js';
 
 const router = express.Router();
 
+// SOLO DEBUG, TOGLIERE SUBITO DOPO
 router.get('/', getAllUsers);
 router.get('/id', getUserById);
 

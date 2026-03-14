@@ -89,6 +89,10 @@ Tipo oggetti dispensa
 ### Database
 Il database utilizzato è quello che sta nell'altro progetto di git, eventualmente lo metterò in sta cartella, ma ora non ho proprio voglia :p 
 
+Ogni volta che viene modificato il database bisogna, dentro alla cartella giusta, fare questi due comandi:
+`docker-compose down -v`
+`docker-compose up`
+
 # Trigger
 Ho avuto problemi con i trigger per i log, ho paura che siano da rifare completamente da capo, capita. Magari eviterei di farli implementare completamente da chatgpt, specialmente se non so come funzionino.
 Per ora la scelta migliore sembra proprio di toglierli del tutto
