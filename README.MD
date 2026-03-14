@@ -43,8 +43,8 @@ Persona
 - [x] Creare utente
 - [x] Login utente
 - [x] Get utente
-- [ ] Modifica utente
-- [ ] Eliminare utente
+- [x] Modifica utente
+- [x] Eliminare utente
 
 Casa
 - [ ] Creare casa
@@ -101,3 +101,4 @@ Credo che per testare la API insomnia sia broken e poi potrebbe tornare anche ut
 
 # Problemi noti
 - Per il login bisogna fare qualcosa di più safe, dato che usare soltanto l'ID non è la scelta migliore. Creare un token per autorizzare tutte le operazioni.
+- Secondo me dovrei fare dei return, dalle funzioni model, più significativi

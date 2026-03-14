@@ -7,17 +7,19 @@ import { createUser } from '../controllers/userController.js';
 import { loginUser } from '../controllers/userController.js';
 import { getUserById } from '../controllers/userController.js';
 import { modUser } from '../controllers/userController.js';
-
+import { delUser } from '../controllers/userController.js';
 
 const router = express.Router();
 
 router.get('/', getAllUsers);
 router.get('/id', getUserById);
+
 router.post('/login', loginUser);
 
 router.post('/', createUser);
 
 router.patch('/', modUser);
 
+router.delete('/', delUser);
 
 export default router;

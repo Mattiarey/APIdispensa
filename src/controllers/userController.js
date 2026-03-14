@@ -2,12 +2,12 @@
 import Persona from '../entities/user.js';
 
 // Modelli
-import {getUsers} from '../models/userModel.js';
-import {newUser} from '../models/userModel.js';
-import {get_user_safe} from '../models/userModel.js';
-import {getUserById_model} from '../models/userModel.js';
-import {modifyUser_model} from '../models/userModel.js';
-
+import { getUsers } from '../models/userModel.js';
+import { newUser } from '../models/userModel.js';
+import { get_user_safe } from '../models/userModel.js';
+import { getUserById_model } from '../models/userModel.js';
+import { modifyUser_model } from '../models/userModel.js';
+import { delUser_model } from '../models/userModel.js';
 
 
 export const getAllUsers = async (req, res) => {
@@ -30,7 +30,7 @@ export const getUserById = async (req, res) => {
         const userId = req.body.id;
         let full_user = await getUserById_model(userId);
         res.json(full_user);
-    }catch (error) {
+    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 }
@@ -92,9 +92,9 @@ export const modUser = async (req, res) => {
         if (password) {
             // Usiamo il tuo metodo statico per generare l'hash
             // Assumendo che create() restituisca una Persona con l'hash in .password
-            const utenteConPass = await Persona.create({ 
-                ...altriDati, 
-                password 
+            const utenteConPass = await Persona.create({
+                ...altriDati,
+                password
             });
             utenteDaModificare.password = utenteConPass.password;
         }
@@ -110,5 +110,18 @@ export const modUser = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+}
+/**
+ * @brief per eliminare un user serve usare l'id
+ */
+export const delUser = async (req, res) => {
+    try {
+        const userId = req.body.id;
+        let return_value = await delUser_model(userId);
+        res.json(return_value);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
     }
 }
