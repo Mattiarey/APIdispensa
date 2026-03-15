@@ -1,6 +1,7 @@
-import Casa from '../entities/home.js'
+import Casa from '../entities/home.js';
 
 import { getAllHomes_model } from '../models/homeModel.js';
+import { newHome } from '../models/homeModel.js';
 
 export const getAllHomes = async(req, res) => {
     try{
@@ -8,6 +9,18 @@ export const getAllHomes = async(req, res) => {
         res.json(homes);
     }
     catch(err){
-        res.status(500).json({ error: error.message })
+        res.status(500).json({ error: err.message })
+    }
+}
+
+export const createHome = async (req, res) => {
+    try {
+        const nome = req.body.nome;
+        const nuova_casa = new Casa(nome);
+
+        const result = await newHome(nuova_casa);
+        res.status(201).json(result);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 }

@@ -2,8 +2,8 @@ export default class Casa {
     constructor(nome) {
         // id
         this.nome = nome;
-        this.slug = generateSlug(nome);
-        this.code = generateInviteCode(); // codice invito
+        this.slug = Casa.generateSlug(nome);
+        this.code = Casa.generateInviteCode(); // codice invito
     }
     static generateSlug(str) {
         return str
