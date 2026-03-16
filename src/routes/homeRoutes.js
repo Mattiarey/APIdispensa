@@ -6,6 +6,7 @@ const router = express.Router();
 
 // SOLO DEBUG, TOGLIERE SUBITO DOPO
 router.get('/', getAllHomes);
+//router.get('/id', getHomeSlCd)
 
 router.post('/', createHome);
 

@@ -9,18 +9,20 @@ import { getUserById } from '../controllers/userController.js';
 import { modUser } from '../controllers/userController.js';
 import { delUser } from '../controllers/userController.js';
 
+import { verifyToken } from '../config/auth.js';
+
 const router = express.Router();
 
 // SOLO DEBUG, TOGLIERE SUBITO DOPO
 router.get('/', getAllUsers);
-router.get('/id', getUserById);
+router.get('/me', verifyToken, getUserById);
 
 router.post('/login', loginUser);
 
 router.post('/', createUser);
 
-router.patch('/', modUser);
+router.patch('/', verifyToken, modUser);
 
-router.delete('/', delUser);
+router.delete('/', verifyToken, delUser);
 
 export default router;

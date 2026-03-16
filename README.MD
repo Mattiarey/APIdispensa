@@ -4,6 +4,7 @@ Va beh, a parte installare node.js bisogna anche fare
 `npm install express mysql2 dotenv`
 `npm install nodemon --save-dev`
 `npm i bcrypt`
+`npm install jsonwebtoken` 
 
 Scrivo questa roba perché ho paura che la cartella node_modules sia troppo pesante per git
 

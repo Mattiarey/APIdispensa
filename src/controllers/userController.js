@@ -1,3 +1,6 @@
+import jwt from 'jsonwebtoken';
+const SECRET_KEY = "palle_pelose"; // da sostituire poi con process.env.JWT_SECRET
+
 // Classi 
 import Persona from '../entities/user.js';
 
@@ -61,7 +64,16 @@ export const loginUser = async (req, res) => {
     try {
         const credentials = Persona.createCredentials(req.body);
         const result = await get_user_safe(credentials);
-        res.json({ result });
+        
+        if(typeof result === 'number'){
+            const token = jwt.sign({id: result}, SECRET_KEY, {expiresIn: '24h'});
+
+            res.json({token: token, userId: result, message: "Login effettuato"});
+        }else{
+            res.status(401).json({error: error.message});
+        }
+
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -78,10 +90,12 @@ export const loginUser = async (req, res) => {
  */
 export const modUser = async (req, res) => {
     try {
-        const { id, password, ...altriDati } = req.body;
+        const {password, ...altriDati } = req.body;
+
+        const id = req.userId;
 
         if (!id) {
-            return res.status(400).json({ error: "ID utente mancante" });
+            return res.status(400).json({ error: "Utente non autenticato" });
         }
 
         // 1. Creiamo l'istanza base con i dati "normali"
