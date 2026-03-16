@@ -16,7 +16,7 @@ export const newHome = async (casa) => {
         try {
             const [result] = await db.query("INSERT INTO casa (nome, slug, codice_invito) VALUES (?, ?, ?)",
                 [casa.nome, casa.slug, casa.code]);
-            return { id: result.insertId, ...casa}
+            return { id: result.insertId, ...casa }
         }
         catch (err) {
             if (err.code === "ERR_DUP_ENTRY") {
@@ -25,4 +25,9 @@ export const newHome = async (casa) => {
             throw err;
         }
     }
+}
+
+export const getHomeSlCd_model = async (slug, code) => {
+    const [rows] = await db.execute('SELECT * FROM casa WHERE slug = ? AND codice_invito = ?', [slug, code]);
+    return rows[0];
 }
