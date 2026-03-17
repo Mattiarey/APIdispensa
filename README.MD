@@ -46,10 +46,11 @@ Persona
 - [x] Get utente
 - [x] Modifica utente
 - [x] Eliminare utente
+- [x] Entra in casa
 
 Casa
 - [x] Creare casa
-- [ ] Get casa
+- [x] Get casa
 - [ ] Modificare casa
 - [ ] Eliminare casa
 - [ ] Aggiungere persone alla casa

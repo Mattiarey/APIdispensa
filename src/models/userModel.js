@@ -103,3 +103,23 @@ export const delUser_model = async (userId) => {
     let risultato = check == 1? "Utente eliminato": "Utente non trovato";
     return risultato;
 }
+
+export const joinHome_model = async (userId, slug, code, ruolo) => {
+    // Il terzo punto interrogativo ora è per il ruolo
+    const query = `
+        INSERT INTO membri_casa (utente_id, casa_id, ruolo)
+        SELECT ?, id, ?
+        FROM casa
+        WHERE slug = ? AND codice_invito = ?
+    `;
+
+    try {
+        const [result] = await db.execute(query, [userId, ruolo, slug, code]);
+        return result;
+    } catch (error) {
+        if (error.code === 'ER_DUP_ENTRY') {
+            throw new Error("L'utente fa già parte di questa casa.");
+        }
+        throw error;
+    }
+};

@@ -11,7 +11,7 @@ import { get_user_safe } from '../models/userModel.js';
 import { getUserById_model } from '../models/userModel.js';
 import { modifyUser_model } from '../models/userModel.js';
 import { delUser_model } from '../models/userModel.js';
-
+import { joinHome_model } from '../models/userModel.js';
 
 export const getAllUsers = async (req, res) => {
     try {
@@ -64,13 +64,14 @@ export const loginUser = async (req, res) => {
     try {
         const credentials = Persona.createCredentials(req.body);
         const result = await get_user_safe(credentials);
-        
-        if(typeof result === 'number'){
-            const token = jwt.sign({id: result}, SECRET_KEY, {expiresIn: '24h'});
 
-            res.json({token: token, userId: result, message: "Login effettuato"});
-        }else{
-            res.status(401).json({error: error.message});
+        if (typeof result === 'number') {
+            //const token = jwt.sign({ id: result }, SECRET_KEY, { expiresIn: '24h' });
+            const token = jwt.sign({ id: result }, SECRET_KEY);
+
+            res.json({ token: token, userId: result, message: "Login effettuato" });
+        } else {
+            res.status(401).json({ error: "login non effettutato" });
         }
 
 
@@ -90,7 +91,7 @@ export const loginUser = async (req, res) => {
  */
 export const modUser = async (req, res) => {
     try {
-        const {password, ...altriDati } = req.body;
+        const { password, ...altriDati } = req.body;
 
         const id = req.userId;
 
@@ -139,3 +140,30 @@ export const delUser = async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 }
+
+export const joinHome = async (req, res) => {
+    try {
+        // Estraiamo il ruolo dal body
+        const { slug, code, ruolo } = req.body;
+        const userId = req.userId; // Preso dal token JWT
+
+        // Piccola validazione: accettiamo solo i ruoli previsti dal DB
+        const ruoliAmmessi = ['admin', 'member']; 
+        const ruoloFinale = ruoliAmmessi.includes(ruolo) ? ruolo : 'member';
+
+        if (!slug || !code) {
+            return res.status(400).json({ error: "Slug e codice d'invito necessari" });
+        }
+
+        const result = await joinHome_model(userId, slug, code, ruoloFinale);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: "Credenziali casa errate." });
+        }
+
+        res.json({ success: true, message: `Ti sei unito alla casa come ${ruoloFinale}` });
+
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+};
