@@ -26,12 +26,12 @@ persona: {
 spesa_ogg: {
   shape: sql_table
   id: int {constraint: primary_key}
-  nome: varchar
-  marca: varchar
-  quantita: int
-  peso: decimal
-  data_aggiunta: timestamp
   fk_casa: int {constraint: foreign_key}
+  fk_prodotto: int {constraint: foreign_key}
+  quantita: int
+  status: enum
+  fk_aggiunto_da: int
+  data_aggiunta: timestamp
 }
 disp_tipo: {
   shape: sql_table
@@ -53,21 +53,49 @@ ogg_tipo: {
 disp_oggetti: {
   shape: sql_table
   id: int {constraint: primary_key}
-  fk_ogg_tipo: int {constraint: foreign_key}
+  fk_prodotto: int {constraint: foreign_key}
   fk_disp: int {constraint: foreign_key}
-  nome: varchar
-  marca: varchar
   scadenza: date
-  data_acquisto: timestamp
-  peso_max: decimal
-  percentuale: int
-  peso_attuale: decimal
-  numero: int
+  capacita_confezione: decimal
+  unita_misura: enum
+  stato_consumo: enum
+  data_acquisto: date
 }
+marca: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  nome: varchar {constraint: unique}
+}
+prodotto_catalogo: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  nome: varchar
+  fk_marca: int {constraint: foreign_key}
+  fk_ogg_tipo: int {constraint: foreign_key}
+}
+storico_consumi: {
+  shape: sql_table
+  id: int {constraint: primary_key}
+  fk_prodotto: int {constraint: foreign_key}
+  fk_casa: int {constraint: foreign_key}
+  fk_persona: int {constraint: foreign_key}
+
+  data_inserimento_orig: timestamp
+  data_scadenza_orig: date
+  capacita_confezione_orig: decimal
+  unita_misura_orig: varchar
+
+  data_consumo: timestamp
+  motivo_consumo: enum
+}
+
 membri_casa.casa_id <- casa.id
 membri_casa.utente_id <- persona.id
 spesa_ogg.fk_casa <- casa.id
 dispensa.fk_casa <- casa.id
 dispensa.fk_disp_tipo <- disp_tipo.id
-disp_oggetti.fk_ogg_tipo <- ogg_tipo.id
 disp_oggetti.fk_disp <- dispensa.id
+prodotto_catalogo.fk_marca <- marca.id
+prodotto_catalogo.fk_ogg_tipo <- ogg_tipo.id
+disp_oggetti.fk_prodotto <- prodotto_catalogo.id
+spesa_ogg.fk_prodotto <- prodotto_catalogo.id

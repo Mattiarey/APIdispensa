@@ -53,7 +53,7 @@ Casa
 - [x] Get casa
 - [ ] Modificare casa
 - [ ] Eliminare casa
-- [ ] Aggiungere persone alla casa
+- [x] Aggiungere persone alla casa
 
 Oggetti spesa
 - [ ] Aggiungere oggetti spesa alla casa
