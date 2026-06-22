@@ -64,3 +64,41 @@ export const getHomeSlCd_model = async (slug, code) => {
 
     return casaInfo;
 }
+export const checkHomeRole_model = async(idUtente, idCasa) => {
+    let query = `
+    select ruolo from membri_casa 
+    where utente_id = ? and casa_id = ?;`;
+    const [rows] = await db.query(query, [idUtente, idCasa]);
+    if(!rows || rows.length === 0){
+        return null;
+    }
+    const ruolo = rows[0].ruolo;
+    return ruolo;
+}
+
+export const modifyHome_model = async(idCasa, datiDaModificare) => {
+    const mapping = {
+        nome: 'nome',
+        slug: 'slug'
+    };
+    const updates = [];
+    const values = [];
+
+    for (const [key, value] of Object.entries(datiDaModificare)){
+        const dbColumn = mapping[key];
+        
+        // CRUCIALE: Escludiamo valori nulli, indefiniti o metodi
+        if (dbColumn && value !== undefined && value !== null && typeof value !== 'function') {
+            updates.push(`${dbColumn} = ?`);
+            values.push(value);
+        }
+    }
+    if(updates.length === 0) return { affectedRows: 0 };
+
+    values.push(idCasa);
+
+    const query = `UPDATE casa SET ${updates.join(', ')} WHERE id = ?`;
+    
+    const [result] = await db.execute(query, values);
+    return result;
+}

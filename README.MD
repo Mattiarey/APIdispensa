@@ -40,53 +40,50 @@ Le cartelle appena esplicitate sono da considerare come quelle del modello MVC i
 Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti, quindi non dovrebbe essere troppo difficile capire tra mille anni.
 
 ### Cose da fare
-Persona
-- [x] Creare utente
+
+#### Persona (Gestione Utenti ed Autenticazione)
+- [x] Creare utente (Registrazione)
 - [x] Login utente
-- [x] Get utente
+- [x] Get utente (Profilo corrente)
 - [x] Modifica utente
 - [x] Eliminare utente
-- [x] Entra in casa
 
-Casa
-- [x] Creare casa
-- [x] Get casa
-- [ ] Modificare casa
-- [ ] Eliminare casa
-- [x] Aggiungere persone alla casa
+#### Casa (Gestione Nucleo Familiare)
+- [x] Creare casa (Assegna automaticamente il ruolo 'owner')
+- [x] Get casa (Dettagli e lista membri)
+- [x] Modificare casa (Riservato a 'owner' e 'admin')
+- [ ] Eliminare casa (Riservato a 'owner')
+- [x] Entrare in casa tramite codice invito
+- [ ] Gestione membri (Rimuovere un membro o uscire volontariamente dalla casa)
 
-Oggetti spesa
-- [ ] Aggiungere oggetti spesa alla casa
-- [ ] Get oggetto
-- [ ] Modificare oggetti spesa dalla lista della casa
-- [ ] Eliminare oggetti spesa dalla lista della casa
-- [ ] Mettere gli oggetti dalla lista della spesa alla dispensa
+#### Catalogo Prodotti e Tipologie (Tabelle di Supporto)
+- [ ] Get tipologie dispensa (Sola lettura)
+- [ ] Get tipologie oggetti (Sola lettura)
+- [ ] Get marche (Sola lettura)
+- [ ] Ricerca prodotti nel catalogo (Restituisce i prodotti globali di sistema e i prodotti custom della specifica casa)
+- [ ] Creare nuovo prodotto custom (Associato alla casa dell'utente)
 
-Dispensa
+#### Dispensa (Gestione Contenitori)
 - [ ] Creare dispensa
-- [ ] Get dispensa
-- [ ] Modificare dispensa
+- [ ] Get dispense della casa
+- [ ] Modificare nome dispensa
 - [ ] Eliminare dispensa
 
-Tipo Dispensa
-- [ ] Creare tipo dispensa
-- [ ] Get tipo
-- [ ] Modificare tipo dispensa
-- [ ] Eliminare tipo dispensa
- 
-Oggetti dispensa
-- [ ] Creare oggetti dispensa
-- [ ] Get oggetto
-- [ ] Modificare (e/o aggiornare) oggetti dispensa
-- [ ] Eliminare oggetti dispensa
-- [ ] Aggiungere informazioni a quelli ottenuti dalla lista della spesa
-- [ ] Fare in modo che gli oggetti che si aggiungano, se dello stesso tipo (all'incirca, nel senso che alcune informazioni in certi casi possono anche andare nascoste) siano cumulabili.
+#### Oggetti Dispensa (Gestione Inventario)
+- [ ] Aggiungere oggetto in dispensa (Inserimento manuale)
+- [ ] Get oggetti in dispensa (Con filtro per dispensa, per stato o raggruppamento per prodotto)
+- [ ] Modificare dettagli oggetto (Scadenza, stato_consumo)
+- [ ] Consumare o buttare oggetto (Elimina da disp_oggetti e crea record in storico_consumi)
 
-Tipo oggetti dispensa
-- [ ] Creare tipo oggetti
-- [ ] Get tipo
-- [ ] Modificare tipo oggetti
-- [ ] Eliminare tipo oggetti
+#### Oggetti Spesa (Gestione Acquisti)
+- [ ] Aggiungere prodotto alla lista della spesa
+- [ ] Get lista della spesa della casa
+- [ ] Aggiornare stato della spesa (Es. da 'da_comprare' a 'nel_carrello')
+- [ ] Rimuovere elemento dalla lista (Senza completare l'acquisto)
+- [ ] Completare l'acquisto (Rimuove da spesa_ogg, richiede dettagli scadenza/capacità e inserisce in disp_oggetti)
+
+#### Storico Consumi (Monitoraggio)
+- [ ] Get storico (Elenco oggetti consumati/buttati per statistiche o reinserimento rapido nella spesa)
 
 ### Database
 Il database utilizzato è quello che sta nell'altro progetto di git, eventualmente lo metterò in sta cartella, ma ora non ho proprio voglia :p 
