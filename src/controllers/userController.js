@@ -132,9 +132,13 @@ export const modUser = async (req, res) => {
  */
 export const delUser = async (req, res) => {
     try {
-        const userId = req.body.id;
+        const userId = req.userId;
         let return_value = await delUser_model(userId);
-        res.json(return_value);
+        if (result.affectedRows === 0) {
+            return res.status(400).json({ error: "Nessuna persona eliminata. Verifica i dati." });
+        }
+
+        res.status(200).json({ success: true, message: "Persona eliminata" });
 
     } catch (error) {
         res.status(500).json({ error: error.message })
@@ -148,7 +152,7 @@ export const joinHome = async (req, res) => {
         const userId = req.userId; // Preso dal token JWT
 
         // Piccola validazione: accettiamo solo i ruoli previsti dal DB
-        const ruoliAmmessi = ['admin', 'member']; 
+        const ruoliAmmessi = ['admin', 'member'];
         const ruoloFinale = ruoliAmmessi.includes(ruolo) ? ruolo : 'member';
 
         if (!slug || !code) {

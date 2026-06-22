@@ -52,7 +52,7 @@ Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti,
 - [x] Creare casa (Assegna automaticamente il ruolo 'owner')
 - [x] Get casa (Dettagli e lista membri)
 - [x] Modificare casa (Riservato a 'owner' e 'admin')
-- [ ] Eliminare casa (Riservato a 'owner')
+- [x] Eliminare casa (Riservato a 'owner')
 - [x] Entrare in casa tramite codice invito
 - [ ] Gestione membri (Rimuovere un membro o uscire volontariamente dalla casa)
 

@@ -8,9 +8,9 @@ import { verifyToken } from '../config/auth.js';
 
 const router = express.Router();
 
-// SOLO DEBUG, TOGLIERE SUBITO DOPO
-router.get('/', getAllUsers);
-router.get('/me', verifyToken, getUserById);
+
+router.get('/', getAllUsers); // SOLO DEBUG, TOGLIERE SUBITO DOPO
+router.get('/me', verifyToken, getUserById); // SOLO DEBUG, TOGLIERE SUBITO DOPO
 
 router.post('/login', loginUser);
 

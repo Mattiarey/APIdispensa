@@ -10,18 +10,51 @@ export const getAllHomes_model = async () => {
     return rows;
 }
 
-export const newHome = async (casa) => {
-    while (true) {
+export const newHome = async (casa, userId) => {
+    // Richiediamo una singola connessione dal pool per garantire l'isolamento della transazione
+    const connection = await db.getConnection(); 
 
+    while (true) {
         try {
-            const [result] = await db.query("INSERT INTO casa (nome, slug, codice_invito) VALUES (?, ?, ?)",
-                [casa.nome, casa.slug, casa.code]);
-            return { id: result.insertId, ...casa }
-        }
-        catch (err) {
-            if (err.code === "ERR_DUP_ENTRY") {
-                continue;
+            // Inizio della transazione
+            await connection.beginTransaction();
+
+            // 1. Inserimento della nuova casa
+            const queryCasa = "INSERT INTO casa (nome, slug, codice_invito) VALUES (?, ?, ?)";
+            const [resultCasa] = await connection.query(queryCasa, [casa.nome, casa.slug, casa.code]);
+            
+            const casaId = resultCasa.insertId;
+
+            // 2. Assegnazione dell'utente come 'owner'
+            const queryMembri = "INSERT INTO membri_casa (utente_id, casa_id, ruolo) VALUES (?, ?, 'owner')";
+            await connection.query(queryMembri, [userId, casaId]);
+
+            // Se entrambe le query hanno successo, confermiamo la transazione
+            await connection.commit();
+            
+            // Rilasciamo la connessione al pool
+            connection.release();
+
+            // Restituiamo i dati completi al controller
+            return { 
+                id: casaId, 
+                ...casa, 
+                ruolo_assegnato: 'owner' 
+            };
+
+        } catch (err) {
+            // In caso di errore, annulliamo qualsiasi modifica fatta in questa transazione
+            await connection.rollback();
+
+            // Controllo per violazione di unicità (il codice invito esiste già)
+            if (err.code === "ER_DUP_ENTRY") {
+                // Rigeneriamo il codice e riproviamo il ciclo
+                casa.code = Casa.generateInviteCode();
+                continue; 
             }
+
+            // Per qualsiasi altro errore critico, rilasciamo la connessione e interrompiamo
+            connection.release();
             throw err;
         }
     }
@@ -100,5 +133,10 @@ export const modifyHome_model = async(idCasa, datiDaModificare) => {
     const query = `UPDATE casa SET ${updates.join(', ')} WHERE id = ?`;
     
     const [result] = await db.execute(query, values);
+    return result;
+}
+export const delHome_model = async(idCasa) => {
+    let query = 'delete from casa where id = ?';
+    const [result] = await db.execute(query, [idCasa]);
     return result;
 }

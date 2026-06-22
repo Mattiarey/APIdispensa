@@ -98,10 +98,9 @@ export const modifyUser_model = async (userId, campi_da_modificare) => {
 
 
 export const delUser_model = async (userId) => {
-    const [result] = await db.query('DELETE FROM persona WHERE id = ?', userId);
-    let check = result.affectedRows;
-    let risultato = check == 1? "Utente eliminato": "Utente non trovato";
-    return risultato;
+    let query = 'delete from persona where id = ?';
+    const [result] = await db.execute(query, [userId]);
+    return result;
 }
 
 export const joinHome_model = async (userId, slug, code, ruolo) => {

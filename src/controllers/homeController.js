@@ -1,6 +1,6 @@
 import Casa from '../entities/home.js';
 
-import { getAllHomes_model, getHomeSlCd_model, checkHomeRole_model, modifyHome_model } from '../models/homeModel.js';
+import { getAllHomes_model, getHomeSlCd_model, checkHomeRole_model, modifyHome_model, delHome_model } from '../models/homeModel.js';
 import { newHome } from '../models/homeModel.js';
 
 export const getAllHomes = async(req, res) => {
@@ -12,13 +12,22 @@ export const getAllHomes = async(req, res) => {
         res.status(500).json({ error: err.message })
     }
 }
-
+/**
+ * 
+ * @param {*} req nome della casa e id utente attuale
+ * @param {*} res 
+ */
 export const createHome = async (req, res) => {
     try {
         const nome = req.body.nome;
+        const userId = req.userId;
+
+        if (!nome) {
+            return res.status(400).json({ error: "Il nome della casa è obbligatorio." });
+        }
         const nuova_casa = new Casa(nome);
 
-        const result = await newHome(nuova_casa);
+        const result = await newHome(nuova_casa, userId);
         res.status(201).json(result);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -42,7 +51,7 @@ export const modHome = async(req, res) => {
     try {
         // 1. Estrazione parametri sicuri
         const idCasa = req.body.id_casa; // O req.params.id, a seconda della tua rotta
-        const idUtente = req.body.userId;     // Proviene dal middleware JWT (come in joinHome)
+        const idUtente = req.userId;     // Proviene dal middleware JWT (come in joinHome)
         const datiDaModificare = req.body.dati; // Es: { nome: "Nuovo Nome" }
 
         if (!idCasa || !datiDaModificare) {
@@ -73,6 +82,40 @@ export const modHome = async(req, res) => {
         }
 
         res.status(200).json({ success: true, message: "Impostazioni della casa aggiornate correttamente." });
+
+    } catch(err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+export const delHome = async(req, res) =>{
+    try {
+        // 1. Estrazione parametri sicuri
+        const idCasa = req.body.id_casa; // O req.params.id, a seconda della tua rotta
+        const idUtente = req.userId;     // Proviene dal middleware JWT (come in joinHome)
+
+        if (!idCasa || !idUtente) {
+            return res.status(400).json({ error: "ID casa e ID utente sono obbligatori." });
+        }
+
+        // 2. Verifica dei permessi (Interrogazione sicura al DB)
+        // Questa funzione deve eseguire una SELECT su membri_casa filtrando per utente_id e casa_id
+        const ruoloUtente = await checkHomeRole_model(idUtente, idCasa);
+
+        if (!ruoloUtente) {
+            return res.status(404).json({ error: "L'utente non appartiene a questa casa." });
+        }
+
+        if (ruoloUtente !== 'owner') {
+            return res.status(403).json({ error: "Azione negata. Solo l'owner della casa può eliminarla." });
+        }
+
+        const result = await delHome_model(idCasa);
+
+        if (result.affectedRows === 0) {
+            return res.status(400).json({ error: "Nessuna casa eliminata. Verifica i dati." });
+        }
+
+        res.status(200).json({ success: true, message: "Casa eliminata" });
 
     } catch(err) {
         res.status(500).json({ error: err.message });
