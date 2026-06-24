@@ -54,7 +54,7 @@ Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti,
 - [x] Modificare casa (Riservato a 'owner' e 'admin')
 - [x] Eliminare casa (Riservato a 'owner')
 - [x] Entrare in casa tramite codice invito
-- [ ] Gestione membri (Rimuovere un membro o uscire volontariamente dalla casa)
+- [x] Gestione membri (Rimuovere un membro o uscire volontariamente dalla casa)
 
 #### Catalogo Prodotti e Tipologie (Tabelle di Supporto)
 - [ ] Get tipologie dispensa (Sola lettura)

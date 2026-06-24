@@ -1,14 +1,14 @@
 import Casa from '../entities/home.js';
 
-import { getAllHomes_model, getHomeSlCd_model, checkHomeRole_model, modifyHome_model, delHome_model } from '../models/homeModel.js';
+import { getAllHomes_model, getHomeSlCd_model, checkHomeRole_model, modifyHome_model, delHome_model, kick_model } from '../models/homeModel.js';
 import { newHome } from '../models/homeModel.js';
 
-export const getAllHomes = async(req, res) => {
-    try{
+export const getAllHomes = async (req, res) => {
+    try {
         const homes = await getAllHomes_model();
         res.json(homes);
     }
-    catch(err){
+    catch (err) {
         res.status(500).json({ error: err.message })
     }
 }
@@ -35,19 +35,19 @@ export const createHome = async (req, res) => {
 }
 
 export const getHomeSlCd = async (req, res) => {
-    try{
+    try {
         const slug = req.body.slug;
         const code = req.body.codice_invito;
         const result = await getHomeSlCd_model(slug, code);
         res.status(201).json(result);
     }
-    catch (err){
-        res.status(500).json({error: err.message});
+    catch (err) {
+        res.status(500).json({ error: err.message });
     }
 }
 
 // questa modifica deve essere possibile soltanto se si è owner o admin
-export const modHome = async(req, res) => {
+export const modHome = async (req, res) => {
     try {
         // 1. Estrazione parametri sicuri
         const idCasa = req.body.id_casa; // O req.params.id, a seconda della tua rotta
@@ -72,7 +72,7 @@ export const modHome = async(req, res) => {
 
         // 3. Esecuzione della modifica (simile a modUser)
         // Passiamo l'ID della casa e l'oggetto con i soli campi da aggiornare
-        if(datiDaModificare.nome){
+        if (datiDaModificare.nome) {
             datiDaModificare.slug = Casa.generateSlug(datiDaModificare.nome);
         }
         const result = await modifyHome_model(idCasa, datiDaModificare);
@@ -83,11 +83,11 @@ export const modHome = async(req, res) => {
 
         res.status(200).json({ success: true, message: "Impostazioni della casa aggiornate correttamente." });
 
-    } catch(err) {
+    } catch (err) {
         res.status(500).json({ error: err.message });
     }
 }
-export const delHome = async(req, res) =>{
+export const delHome = async (req, res) => {
     try {
         // 1. Estrazione parametri sicuri
         const idCasa = req.body.id_casa; // O req.params.id, a seconda della tua rotta
@@ -117,7 +117,67 @@ export const delHome = async(req, res) =>{
 
         res.status(200).json({ success: true, message: "Casa eliminata" });
 
-    } catch(err) {
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+export const kick = async (req, res) => {
+    try {
+        const idModeratore = req.userId;
+        const idCacciato = req.body.id;
+        const idCasa = req.body.id_casa;
+
+        if (!idCasa || !idCacciato) {
+            return res.status(400).json({ error: "ID casa e ID cacciato sono obbligatori." });
+        }
+        const ruoloUtente = await checkHomeRole_model(idModeratore, idCasa);
+
+        if (!ruoloUtente) {
+            return res.status(404).json({ error: "L'utente attuale non appartiene a questa casa." });
+        }
+
+        if (ruoloUtente !== 'owner' && ruoloUtente !== 'admin') {
+            return res.status(403).json({ error: "Azione negata. Solo l'owner e gli admin della casa possono cacciare le persone." });
+        }
+        const result = await kick_model(idCacciato, idCasa);
+
+        if (result.affectedRows === 0) {
+            return res.status(400).json({ error: "Nessuna persona cacciata. Verifica i dati." });
+        }
+
+        res.status(200).json({ success: true, message: "Scemo cacciato" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+}
+export const leave = async (req, res) => {
+    try {
+        const idUtente = req.userId;
+        const idCasa = req.body.id_casa;
+
+        if (!idCasa || !idUtente) {
+            return res.status(400).json({ error: "ID casa mancante o utente non autenticato." });
+        }
+
+        const result = await kick_model(idUtente, idCasa);
+
+        if (result.action === 'not_found') {
+            return res.status(404).json({ error: "Non fai parte di questa casa." });
+        }
+
+        if (result.action === 'deleted_home') {
+            return res.status(200).json({ 
+                success: true, 
+                message: "Sei uscito. Essendo l'ultimo membro rimasto, la casa è stata eliminata." 
+            });
+        }
+
+        res.status(200).json({ 
+            success: true, 
+            message: "Sei uscito dalla casa con successo." 
+        });
+
+    } catch (err) {
         res.status(500).json({ error: err.message });
     }
 }

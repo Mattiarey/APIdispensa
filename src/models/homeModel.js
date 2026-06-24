@@ -140,3 +140,53 @@ export const delHome_model = async(idCasa) => {
     const [result] = await db.execute(query, [idCasa]);
     return result;
 }
+
+export const kick_model = async (idDaRimuovere, idCasa) => {
+    const connection = await db.getConnection();
+    
+    try {
+        await connection.beginTransaction();
+
+        // 1. Recupera tutti i membri ordinati per data di ingresso (crescente)
+        const queryMembri = `SELECT utente_id, ruolo FROM membri_casa WHERE casa_id = ? ORDER BY unito_il ASC`;
+        const [membri] = await connection.query(queryMembri, [idCasa]);
+
+        // 2. Verifica se l'utente da rimuovere è effettivamente nella casa
+        const utenteDaRimuovere = membri.find(m => m.utente_id === idDaRimuovere);
+        if (!utenteDaRimuovere) {
+            await connection.rollback();
+            connection.release();
+            return { action: 'not_found' };
+        }
+
+        // 3. Se l'utente da rimuovere è l'UNICO membro rimasto, si elimina l'intera casa
+        if (membri.length === 1) {
+            const queryDeleteCasa = `DELETE FROM casa WHERE id = ?`;
+            await connection.query(queryDeleteCasa, [idCasa]);
+            
+            await connection.commit();
+            connection.release();
+            return { action: 'deleted_home' };
+        }
+
+        // 4. Ci sono altri membri. Se l'utente rimosso era l'owner, passiamo il ruolo al più anziano
+        if (utenteDaRimuovere.ruolo === 'owner') {
+            const nuovoOwner = membri.find(m => m.utente_id !== idDaRimuovere);
+            const queryPromote = `UPDATE membri_casa SET ruolo = 'owner' WHERE utente_id = ? AND casa_id = ?`;
+            await connection.query(queryPromote, [nuovoOwner.utente_id, idCasa]);
+        }
+
+        // 5. Eliminiamo l'utente dalla tabella membri_casa
+        const queryDeleteUtente = `DELETE FROM membri_casa WHERE utente_id = ? AND casa_id = ?`;
+        await connection.query(queryDeleteUtente, [idDaRimuovere, idCasa]);
+
+        await connection.commit();
+        connection.release();
+        return { action: 'removed' };
+
+    } catch (error) {
+        await connection.rollback();
+        connection.release();
+        throw error;
+    }
+}
