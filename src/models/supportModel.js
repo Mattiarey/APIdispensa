@@ -16,3 +16,18 @@ export const getMarche_model = async() =>{
     const [rows] = await db.execute(query);
     return rows;
 }
+export const getProdotti_model = async(idCasa, nomeProdotto) => {
+    let query = `
+    select p.nome as nome_prodotto,
+     m.nome as marca,
+      o.nome as tipo_oggetto,
+       c.nome as nome_casa
+    from prodotto_catalogo p
+    left join marca m on m.id = p.fk_marca
+    left join ogg_tipo o on o.id = p.fk_ogg_tipo
+    left join casa c on c.id = p.fk_casa
+    where p.nome like ? and
+    (fk_casa is null or fk_casa = ?)`;
+    const [rows] = await db.execute(query, [nomeProdotto, idCasa]);
+    return rows;
+}
