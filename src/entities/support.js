@@ -1,19 +1,19 @@
 // generato dal sistema quando parte il db
-export default class Marca {
+export class Marca {
     constructor(nome, id = null){
         this.id = id;
         this.nome = nome;
     }
 };
 // generato dal sistema quando parte il db
-export default class Oggetto_tipo{
+export class Oggetto_tipo{
     constructor(nome, id = null){
         this.id = id;
         this.nome = nome;
     }
 };
 // generato dal sistema quando parte il db e anche creato dagli utenti
-export default class Dispensa_tipo{
+export class Dispensa_tipo{
     constructor(nome, id = null){
         this.id = id;
         this.nome = nome;
@@ -24,7 +24,7 @@ export default class Dispensa_tipo{
  * Inoltre se la foreign key di casa è null allora è un prodotto globale, altrimenti è custom della casa.
  * Gestisce sia l'inserimento con chiavi esterne, che la lettura con join
  */
-export default class Prodotto {
+export class Prodotto {
     constructor({ 
         id = null, 
         nome, 

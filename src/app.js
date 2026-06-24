@@ -2,6 +2,7 @@ import express from 'express';
 
 import userRoutes from './routes/userRoutes.js'; 
 import homeRoutes from './routes/homeRoutes.js';
+import supportRoutes from './routes/supportRoutes.js';
 
 import { contextMiddleware } from './config/requestContext.js';
 
@@ -11,5 +12,6 @@ app.use(contextMiddleware);
 
 app.use('/api/user', userRoutes);
 app.use('/api/home', homeRoutes);
+app.use('/api/support', supportRoutes);
 
 export default app;
