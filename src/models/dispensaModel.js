@@ -15,3 +15,15 @@ export const createDispensa_model = async(disp) => {
     const [result] = await db.execute(query, params);
     return result;
 };
+
+export const getTipoDispensa_model = async(idCasa) => {
+
+    let query = `
+    select d.id as id, d.nome as nomeDispensa, t.nome as nomeTipo
+    from dispensa d
+    join disp_tipo t on t.id = d.fk_disp_tipo
+    where d.fk_casa = ?;
+    `
+    const [result] = await db.execute(query, [idCasa]);
+    return result;
+}

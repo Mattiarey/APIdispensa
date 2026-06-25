@@ -1,6 +1,6 @@
 import Dispensa from '../entities/dispensa.js';
 
-import { createDispensa_model } from '../models/dispensaModel.js';
+import { createDispensa_model, getTipoDispensa_model } from '../models/dispensaModel.js';
 import { checkHomeRole_model } from '../models/homeModel.js';
 
 export const createDispensa = async (req, res) => {
@@ -41,4 +41,31 @@ export const createDispensa = async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
-}
+};
+
+export const getDispensa = async (req, res) => {
+    try {
+        const idUtente = req.userId;
+        const idCasa = req.query.idCasa;
+
+        if (!idUtente) {
+            return res.status(400).json({ error: "Devi essere utente della casa per vederne i prodotti" });
+        }
+        const ruoloUtente = await checkHomeRole_model(idUtente, idCasa);
+
+        if (!ruoloUtente) {
+            return res.status(404).json({ error: "L'utente non appartiene a questa casa." });
+        }
+
+        if (!idCasa) {
+            return res.status(400).json({ error: "È obbligatorio esplicitare l'id della casa attuale" });
+        }
+
+        const result = await getTipoDispensa_model(idCasa);
+        
+        res.status(201).json(result);
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
