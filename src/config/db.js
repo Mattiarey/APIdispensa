@@ -8,6 +8,7 @@ import dotenv from 'dotenv';
 import { appendFile, mkdir } from 'fs/promises';
 import path from 'path';
 import { getRequestContext } from './requestContext.js';
+import { writeLog } from './logger.js';
 
 dotenv.config();
 
@@ -35,7 +36,7 @@ async function ensureLogDir() {
     }
 }
 
-async function writeLog(entry) {
+/*async function writeLog(entry) {
     try {
         await ensureLogDir();
         const file = currentLogFile();
@@ -44,7 +45,7 @@ async function writeLog(entry) {
         // Non blocchiamo l'applicazione se il log fallisce
         console.error('DB log failed:', e.message);
     }
-}
+}*/
 
 function escapeParam(p) {
     if (p === null || p === undefined) return 'NULL';
@@ -116,17 +117,18 @@ const db = new Proxy(pool, {
                     const ctx = getRequestContext();
                     const fullQuery = formatQuery(sql, params);
                     writeLog({
+                        type: "DATABASE",
                         timestamp: new Date().toISOString(),
+                        ip: ctx.ip || null,
+                        who: ctx.user || null,
+                        action: ctx.method || null,
+                        path: ctx.path || null,
+                        duration_ms: duration,
+                        
+                        db_success: true,
                         method: prop,
                         full_query: fullQuery,
-                        params: params,
-                        who: ctx.user || null,
-                        path: ctx.path || null,
-                        ip: ctx.ip || null,
-                        http_method: ctx.method || null,
-                        headers: sanitizeHeaders(ctx.headers) || null,
-                        duration_ms: duration,
-                        success: true
+                        params: params || []
                     }).catch(() => {});
                     return res;
                 } catch (err) {
@@ -134,18 +136,18 @@ const db = new Proxy(pool, {
                     const ctx = getRequestContext();
                     const fullQuery = formatQuery(sql, params);
                     writeLog({
+                        type: "DATABASE",
                         timestamp: new Date().toISOString(),
+                        ip: ctx.ip || null,
+                        who: ctx.user || null,
+                        action: ctx.method || null,
+                        path: ctx.path || null,
+                        duration_ms: duration,
+                        
+                        db_success: false, 
                         method: prop,
                         full_query: fullQuery,
-                        params: params,
-                        who: ctx.user || null,
-                        path: ctx.path || null,
-                        ip: ctx.ip || null,
-                        http_method: ctx.method || null,
-                        headers: sanitizeHeaders(ctx.headers) || null,
-                        duration_ms: duration,
-                        success: false,
-                        error: err.message
+                        params: params || []
                     }).catch(() => {});
                     throw err;
                 }

@@ -1,5 +1,7 @@
 import { AsyncLocalStorage } from 'async_hooks';
 
+console.log("=> Modulo RequestContext inizializzato in memoria.");
+
 const als = new AsyncLocalStorage();
 
 export function contextMiddleware(req, res, next) {
