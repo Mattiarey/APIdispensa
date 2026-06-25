@@ -57,11 +57,11 @@ Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti,
 - [x] Gestione membri (Rimuovere un membro o uscire volontariamente dalla casa)
 
 #### Catalogo Prodotti e Tipologie (Tabelle di Supporto)
-- [ ] Get tipologie dispensa (Sola lettura)
-- [ ] Get tipologie oggetti (Sola lettura)
-- [ ] Get marche (Sola lettura)
-- [ ] Ricerca prodotti nel catalogo (Restituisce i prodotti globali di sistema e i prodotti custom della specifica casa)
-- [ ] Creare nuovo prodotto custom (Associato alla casa dell'utente)
+- [x] Get tipologie dispensa (Sola lettura)
+- [x] Get tipologie oggetti (Sola lettura)
+- [x] Get marche (Sola lettura)
+- [x] Ricerca prodotti nel catalogo (Restituisce i prodotti globali di sistema e i prodotti custom della specifica casa)
+- [x] Creare nuovo prodotto custom (Associato alla casa dell'utente)
 
 #### Dispensa (Gestione Contenitori)
 - [ ] Creare dispensa
