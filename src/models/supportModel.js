@@ -21,7 +21,7 @@ export const getProdotti_model = async(idCasa, nomeProdotto) => {
     select p.nome as nome_prodotto,
      m.nome as marca,
       o.nome as tipo_oggetto,
-       c.nome as nome_casa
+       c.nome as nome_casa -- questo è opzionale e probabilmente lo toglierò
     from prodotto_catalogo p
     left join marca m on m.id = p.fk_marca
     left join ogg_tipo o on o.id = p.fk_ogg_tipo

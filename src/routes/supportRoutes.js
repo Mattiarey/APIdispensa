@@ -5,9 +5,9 @@ import { verifyToken } from '../config/auth.js';
 
 const router = express.Router();
 
-router.get('/getTipoDispensa', getTipoDispensa);
-router.get('/getTipoOggetti', getTipoOggetti);
-router.get('/getMarche', getMarche);
-router.get('/getProdotti', getProdotti);
+router.get('/tipo-dispensa', getTipoDispensa);
+router.get('/tipo-oggetti', getTipoOggetti);
+router.get('/marche', getMarche);
+router.get('/prodotti', verifyToken, getProdotti);
 
 export default router;
