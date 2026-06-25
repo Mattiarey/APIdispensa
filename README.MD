@@ -64,7 +64,7 @@ Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti,
 - [x] Creare nuovo prodotto custom (Associato alla casa dell'utente)
 
 #### Dispensa (Gestione Contenitori)
-- [ ] Creare dispensa
+- [x] Creare dispensa
 - [ ] Get dispense della casa
 - [ ] Modificare nome dispensa
 - [ ] Eliminare dispensa

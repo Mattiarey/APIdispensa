@@ -61,11 +61,12 @@ export const newHome = async (casa, userId) => {
 }
 
 export const getHomeSlCd_model = async (slug, code) => {
-    let query = `
+    const queryMembri = `
     SELECT 
     c.id AS casa_id, 
     c.nome AS casa_nome, 
     c.slug, 
+    c.codice_invito,
     p.nome AS utente_nome, 
     p.mail AS utente_mail,
     m.ruolo
@@ -74,25 +75,44 @@ export const getHomeSlCd_model = async (slug, code) => {
     LEFT JOIN persona p ON m.utente_id = p.id
     WHERE c.slug = ? AND c.codice_invito = ?;
     `;
-    const [rows] = await db.query(query, [slug, code]);
+    
+    const [rows] = await db.execute(queryMembri, [slug, code]);
 
     if (!rows || rows.length === 0) {
         return null; 
     }
 
+    const idCasa = rows[0].casa_id;
+
+    const queryDispense = `
+        SELECT 
+            d.nome AS nome_dispensa, 
+            dd.nome AS tipo_dispensa 
+        FROM dispensa d
+        JOIN disp_tipo dd ON dd.id = d.fk_disp_tipo
+        WHERE d.fk_casa = ?;
+    `;
+    const [dispenseRows] = await db.execute(queryDispense, [idCasa]);
+
+    // 3. Assemblaggio dell'oggetto finale
     const casaInfo = {
-        id: rows[0].casa_id,
+        id: idCasa,
         nome: rows[0].casa_nome,
-        //slug: rows[0].slug,
         codice_invito: rows[0].codice_invito,
-        // Filtriamo i membri: se utente_mail è null, la casa è vuota
+        
         membri: rows[0].utente_mail 
             ? rows.map(row => ({
                 nome: row.utente_nome,
                 mail: row.utente_mail,
                 ruolo: row.ruolo
             })) 
-            : [] // Restituisce un array vuoto se non ci sono persone
+            : [],
+            
+        // Modifica qui: non restituiamo più solo stringhe, ma un array di oggetti ben definiti
+        dispense: dispenseRows.map(dispensa => ({
+            nome: dispensa.nome_dispensa,
+            tipo: dispensa.tipo_dispensa
+        }))
     };
 
     return casaInfo;
