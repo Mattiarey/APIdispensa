@@ -27,3 +27,27 @@ export const getTipoDispensa_model = async(idCasa) => {
     const [result] = await db.execute(query, [idCasa]);
     return result;
 }
+
+export const modDispensa_model = async(idDispensa, datiDaModificare) => {
+    const mapping = {
+        nome: 'nome'
+    };
+    const updates = [];
+    const values = [];
+
+    for (const [key, value] of Object.entries(datiDaModificare)){
+        const dbColumn = mapping[key];
+        
+        if (dbColumn && value !== undefined && value !== null && typeof value !== 'function') {
+            updates.push(`${dbColumn} = ?`);
+            values.push(value);
+        }
+    }
+    if(updates.length === 0) return { affectedRows: 0 };
+    values.push(idDispensa);
+
+    const query = `UPDATE dispensa SET ${updates.join(', ')} WHERE id = ?`;
+
+    const [result] = await db.execute(query, values);
+    return result;
+}

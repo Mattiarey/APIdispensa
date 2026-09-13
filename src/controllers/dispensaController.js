@@ -1,6 +1,6 @@
 import Dispensa from '../entities/dispensa.js';
 
-import { createDispensa_model, getTipoDispensa_model } from '../models/dispensaModel.js';
+import { createDispensa_model, getTipoDispensa_model, modDispensa_model } from '../models/dispensaModel.js';
 import { checkHomeRole_model } from '../models/homeModel.js';
 
 export const createDispensa = async (req, res) => {
@@ -64,6 +64,38 @@ export const getDispensa = async (req, res) => {
         const result = await getTipoDispensa_model(idCasa);
         
         res.status(201).json(result);
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const modDispensa = async(req, res) => {
+    try {
+        const idUtente = req.userId;
+        const idDispensa = req.body.id_dispensa;
+        const idCasa = req.body.id_casa;
+        const datiDaModificare = req.body.dati; // in questo caso è solo il nome, ma in futuro potrebbero esserci altre cose
+
+        if (!idUtente) {
+            return res.status(400).json({ error: "Devi essere utente della casa per vederne i prodotti" });
+        }
+        const ruoloUtente = await checkHomeRole_model(idUtente, idCasa);
+
+        if (!ruoloUtente) {
+            return res.status(404).json({ error: "L'utente non appartiene a questa casa." });
+        }
+        if(ruoloUtente !== 'owner' && ruoloUtente !== 'admin'){
+            return res.status(403).json({ error: "L'utente non può modificare in questa casa." });
+        }
+
+        const result = await modDispensa_model(idDispensa, datiDaModificare);
+
+        if (result.affectedRows === 0) {
+            return res.status(400).json({ error: "Nessuna modifica apportata. Verifica i dati." });
+        }
+
+        res.status(200).json({ success: true, message: "Impostazioni della casa aggiornate correttamente." });
 
     } catch (err) {
         res.status(500).json({ error: err.message });

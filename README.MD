@@ -66,7 +66,7 @@ Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti,
 #### Dispensa (Gestione Contenitori)
 - [x] Creare dispensa
 - [x] Get dispense della casa
-- [ ] Modificare nome dispensa
+- [x] Modificare nome dispensa
 - [ ] Eliminare dispensa
 
 #### Oggetti Dispensa (Gestione Inventario)

@@ -86,6 +86,7 @@ export const getHomeSlCd_model = async (slug, code) => {
 
     const queryDispense = `
         SELECT 
+            d.id as id_dispensa,
             d.nome AS nome_dispensa, 
             dd.nome AS tipo_dispensa 
         FROM dispensa d
@@ -110,6 +111,7 @@ export const getHomeSlCd_model = async (slug, code) => {
             
         // Modifica qui: non restituiamo più solo stringhe, ma un array di oggetti ben definiti
         dispense: dispenseRows.map(dispensa => ({
+            id: dispensa.id_dispensa,
             nome: dispensa.nome_dispensa,
             tipo: dispensa.tipo_dispensa
         }))
