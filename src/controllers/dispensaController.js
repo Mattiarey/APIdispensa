@@ -75,7 +75,9 @@ export const modDispensa = async(req, res) => {
         const idUtente = req.userId;
         const idDispensa = req.body.id_dispensa;
         const idCasa = req.body.id_casa;
-        const datiDaModificare = req.body.dati; // in questo caso è solo il nome, ma in futuro potrebbero esserci altre cose
+
+        const datiDaModificare = req.body.dati_disp_tipo; 
+        const newNomeDispensa = req.body.nuovo_nome_dispensa;
 
         if (!idUtente) {
             return res.status(400).json({ error: "Devi essere utente della casa per vederne i prodotti" });
@@ -89,9 +91,9 @@ export const modDispensa = async(req, res) => {
             return res.status(403).json({ error: "L'utente non può modificare in questa casa." });
         }
 
-        const result = await modDispensa_model(idDispensa, datiDaModificare);
+        const {esito1, esito2} = await modDispensa_model(idDispensa, datiDaModificare, newNomeDispensa);
 
-        if (result.affectedRows === 0) {
+        if (esito1.affectedRows === 0 || esito2.affectedRows === 0) {
             return res.status(400).json({ error: "Nessuna modifica apportata. Verifica i dati." });
         }
 
