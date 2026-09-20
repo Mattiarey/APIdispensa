@@ -67,7 +67,7 @@ Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti,
 - [x] Creare dispensa
 - [x] Get dispense della casa
 - [x] Modificare nome dispensa
-- [ ] Eliminare dispensa
+- [x] Eliminare dispensa
 
 #### Oggetti Dispensa (Gestione Inventario)
 - [ ] Aggiungere oggetto in dispensa (Inserimento manuale)
@@ -106,3 +106,6 @@ Credo che per testare la API insomnia sia broken e poi potrebbe tornare anche ut
 - Per il login bisogna fare qualcosa di più safe, dato che usare soltanto l'ID non è la scelta migliore. Creare un token per autorizzare tutte le operazioni.
 - Secondo me dovrei fare dei return, dalle funzioni model, più significativi
 - Gestire meglio gli errori, non è possibile che ogni errore fin'ora sia un internal server error.
+- Non so se mettere i check sugli input (nei controller) perché se li metto qualcuno di esterno che sta cercando di chiamare gli endpoint senza sapere che fanno potrebbe capire quali parametri mettere in input, non dovrebbe essere un problema in quanto c'è il token, però comunque non saprei. 
+- Probabilmente non serve creare l'oggetto per ogni tabella
+- Per metodi come ad esempio delDisp non saprei bene come fare, per ora si passa l'id della dispensa, ma nel frontend non so se sia la scelta migliore. Vedremo

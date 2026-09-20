@@ -64,4 +64,10 @@ export const modDispensa_model = async (idDispensa, datiDaModificare, nuovo_nome
         esito1: result1,
         esito2: result2
     };
+};
+
+export const delDisp_model = async (idDispensa) => {
+    const query = 'DELETE FROM dispensa where id = ?';
+    const [result] = await db.execute(query, [idDispensa]);
+    return result;
 }

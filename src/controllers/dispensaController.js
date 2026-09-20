@@ -1,6 +1,6 @@
 import Dispensa from '../entities/dispensa.js';
 
-import { createDispensa_model, getTipoDispensa_model, modDispensa_model } from '../models/dispensaModel.js';
+import { createDispensa_model, getTipoDispensa_model, modDispensa_model, delDisp_model } from '../models/dispensaModel.js';
 import { checkHomeRole_model } from '../models/homeModel.js';
 
 export const createDispensa = async (req, res) => {
@@ -62,7 +62,7 @@ export const getDispensa = async (req, res) => {
         }
 
         const result = await getTipoDispensa_model(idCasa);
-        
+
         res.status(201).json(result);
 
     } catch (err) {
@@ -70,13 +70,13 @@ export const getDispensa = async (req, res) => {
     }
 };
 
-export const modDispensa = async(req, res) => {
+export const modDispensa = async (req, res) => {
     try {
         const idUtente = req.userId;
         const idDispensa = req.body.id_dispensa;
         const idCasa = req.body.id_casa;
 
-        const datiDaModificare = req.body.dati_disp_tipo; 
+        const datiDaModificare = req.body.dati_disp_tipo;
         const newNomeDispensa = req.body.nuovo_nome_dispensa;
 
         if (!idUtente) {
@@ -87,11 +87,11 @@ export const modDispensa = async(req, res) => {
         if (!ruoloUtente) {
             return res.status(404).json({ error: "L'utente non appartiene a questa casa." });
         }
-        if(ruoloUtente !== 'owner' && ruoloUtente !== 'admin'){
+        if (ruoloUtente !== 'owner' && ruoloUtente !== 'admin') {
             return res.status(403).json({ error: "L'utente non può modificare in questa casa." });
         }
 
-        const {esito1, esito2} = await modDispensa_model(idDispensa, datiDaModificare, newNomeDispensa);
+        const { esito1, esito2 } = await modDispensa_model(idDispensa, datiDaModificare, newNomeDispensa);
 
         if (esito1.affectedRows === 0 || esito2.affectedRows === 0) {
             return res.status(400).json({ error: "Nessuna modifica apportata. Verifica i dati." });
@@ -102,4 +102,30 @@ export const modDispensa = async(req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+};
+
+export const delDisp = async (req, res) => {
+
+    const idUtente = req.userId;
+    const idCasa = req.body.id_casa;
+    const idDispensa = req.body.id_dispensa;
+
+    const ruoloUtente = await checkHomeRole_model(idUtente, idCasa);
+
+    if (!ruoloUtente) {
+        return res.status(404).json({ error: "L'utente non appartiene a questa casa." });
+    }
+
+    if (ruoloUtente !== 'owner' && ruoloUtente !== 'admin') {
+        return res.status(403).json({ error: "Azione negata. Solo owner e admin della casa possono eliminare una dispensa."});
+    }
+
+    const result = await delDisp_model(idDispensa);
+
+
+    if (result.affectedRows === 0) {
+        return res.status(400).json({ error: "Nessuna dispensa eliminata. Verifica i dati." });
+    }
+
+    res.status(200).json({ success: true, message: "Dispensa eliminata" });
 };
