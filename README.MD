@@ -70,8 +70,8 @@ Credo che questo sia tutto. Comunque dovrei riempire tuttecose di mega commenti,
 - [x] Eliminare dispensa
 
 #### Oggetti Dispensa (Gestione Inventario)
-- [ ] Aggiungere oggetto in dispensa (Inserimento manuale)
-- [ ] Get oggetti in dispensa (Con filtro per dispensa, per stato o raggruppamento per prodotto)
+- [x] Aggiungere oggetto in dispensa (Inserimento manuale)
+- [x] Get oggetti in dispensa (Con filtro per dispensa, per stato o raggruppamento per prodotto)
 - [ ] Modificare dettagli oggetto (Scadenza, stato_consumo)
 - [ ] Consumare o buttare oggetto (Elimina da disp_oggetti e crea record in storico_consumi)
 
