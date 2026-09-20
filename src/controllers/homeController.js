@@ -1,7 +1,7 @@
 import Casa from '../entities/home.js';
 
-import { getAllHomes_model, getHomeSlCd_model, checkHomeRole_model, modifyHome_model, delHome_model, kick_model } from '../models/homeModel.js';
-import { newHome } from '../models/homeModel.js';
+import { newHome, getAllHomes_model, getHomeSlCd_model, checkHomeRole_model, modifyHome_model, delHome_model, kick_model } from '../models/homeModel.js';
+
 
 export const getAllHomes = async (req, res) => {
     try {

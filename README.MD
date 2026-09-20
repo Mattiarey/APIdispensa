@@ -108,4 +108,5 @@ Credo che per testare la API insomnia sia broken e poi potrebbe tornare anche ut
 - Gestire meglio gli errori, non è possibile che ogni errore fin'ora sia un internal server error.
 - Non so se mettere i check sugli input (nei controller) perché se li metto qualcuno di esterno che sta cercando di chiamare gli endpoint senza sapere che fanno potrebbe capire quali parametri mettere in input, non dovrebbe essere un problema in quanto c'è il token, però comunque non saprei. 
 - Probabilmente non serve creare l'oggetto per ogni tabella
-- Per metodi come ad esempio delDisp non saprei bene come fare, per ora si passa l'id della dispensa, ma nel frontend non so se sia la scelta migliore. Vedremo
+- Per metodi come ad esempio delDisp non saprei bene come fare, per ora si passa l'id della dispensa, ma nel frontend non so se sia la scelta migliore. In futuro mettere UUID
+- Non vengono rispettate le convenzioni REST, ad esempio per l'eliminazione i parametri vanno messi nell'URL

@@ -105,27 +105,31 @@ export const modDispensa = async (req, res) => {
 };
 
 export const delDisp = async (req, res) => {
+    try {
+        const idUtente = req.userId;
+        const idCasa = req.body.id_casa;
+        const idDispensa = req.body.id_dispensa;
 
-    const idUtente = req.userId;
-    const idCasa = req.body.id_casa;
-    const idDispensa = req.body.id_dispensa;
+        const ruoloUtente = await checkHomeRole_model(idUtente, idCasa);
 
-    const ruoloUtente = await checkHomeRole_model(idUtente, idCasa);
+        if (!ruoloUtente) {
+            return res.status(404).json({ error: "L'utente non appartiene a questa casa." });
+        }
 
-    if (!ruoloUtente) {
-        return res.status(404).json({ error: "L'utente non appartiene a questa casa." });
+        if (ruoloUtente !== 'owner' && ruoloUtente !== 'admin') {
+            return res.status(403).json({ error: "Azione negata. Solo owner e admin della casa possono eliminare una dispensa." });
+        }
+
+        const result = await delDisp_model(idDispensa);
+
+
+        if (result.affectedRows === 0) {
+            return res.status(400).json({ error: "Nessuna dispensa eliminata. Verifica i dati." });
+        }
+
+        res.status(200).json({ success: true, message: "Dispensa eliminata" });
     }
-
-    if (ruoloUtente !== 'owner' && ruoloUtente !== 'admin') {
-        return res.status(403).json({ error: "Azione negata. Solo owner e admin della casa possono eliminare una dispensa."});
+    catch (err) {
+        res.status(500).json({ error: err.message });
     }
-
-    const result = await delDisp_model(idDispensa);
-
-
-    if (result.affectedRows === 0) {
-        return res.status(400).json({ error: "Nessuna dispensa eliminata. Verifica i dati." });
-    }
-
-    res.status(200).json({ success: true, message: "Dispensa eliminata" });
 };

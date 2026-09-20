@@ -86,16 +86,58 @@ export const getHomeSlCd_model = async (slug, code) => {
 
     const queryDispense = `
         SELECT 
-            d.id as id_dispensa,
+            d.id AS id_dispensa,
             d.nome AS nome_dispensa, 
-            dd.nome AS tipo_dispensa 
+            dd.nome AS tipo_dispensa,
+            do.id AS id_oggetto,
+            DATE_FORMAT(do.scadenza, '%Y-%m-%d') AS scadenza,
+            do.capacita_confezione,
+            do.unita_misura,
+            do.stato_consumo,
+            do.data_inserimento,
+            pc.id AS id_prodotto,
+            pc.nome AS nome_prodotto,
+            ma.nome AS nome_marca
         FROM dispensa d
         JOIN disp_tipo dd ON dd.id = d.fk_disp_tipo
+        LEFT JOIN disp_oggetti do ON d.id = do.fk_disp
+        LEFT JOIN prodotto_catalogo pc ON do.fk_prodotto = pc.id
+        LEFT JOIN marca ma ON pc.fk_marca = ma.id
         WHERE d.fk_casa = ?;
     `;
     const [dispenseRows] = await db.execute(queryDispense, [idCasa]);
 
-    // 3. Assemblaggio dell'oggetto finale
+    // Raggruppamento dei risultati SQL in una struttura nidificata
+    const dispenseMap = new Map();
+
+    for (const row of dispenseRows) {
+        // Se la dispensa non è ancora nella mappa, viene inizializzata
+        if (!dispenseMap.has(row.id_dispensa)) {
+            dispenseMap.set(row.id_dispensa, {
+                id: row.id_dispensa,
+                nome: row.nome_dispensa,
+                tipo: row.tipo_dispensa,
+                oggetti: []
+            });
+        }
+
+        // Se è presente un id_oggetto (ovvero la dispensa non è vuota), l'oggetto viene aggiunto all'array
+        if (row.id_oggetto) {
+            dispenseMap.get(row.id_dispensa).oggetti.push({
+                id: row.id_oggetto, // questo probabilmente potrei anche toglierlo
+                id_prodotto: row.id_prodotto,
+                prodotto: row.nome_prodotto,
+                marca: row.nome_marca || null,
+                scadenza: row.scadenza,
+                capacita_confezione: row.capacita_confezione,
+                unita_misura: row.unita_misura,
+                stato_consumo: row.stato_consumo,
+                data_inserimento: row.data_inserimento
+            });
+        }
+    }
+
+    // Assemblaggio dell'oggetto finale
     const casaInfo = {
         id: idCasa,
         nome: rows[0].casa_nome,
@@ -108,13 +150,7 @@ export const getHomeSlCd_model = async (slug, code) => {
                 ruolo: row.ruolo
             })) 
             : [],
-            
-        // Modifica qui: non restituiamo più solo stringhe, ma un array di oggetti ben definiti
-        dispense: dispenseRows.map(dispensa => ({
-            id: dispensa.id_dispensa,
-            nome: dispensa.nome_dispensa,
-            tipo: dispensa.tipo_dispensa
-        }))
+        dispense: Array.from(dispenseMap.values())
     };
 
     return casaInfo;
